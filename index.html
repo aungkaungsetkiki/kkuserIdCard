@@ -3,70 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ID Card Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>KaungYe ID Card Generator</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        /* CSS Styles */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
         :root {
-            --primary-blue: #3a7bd5;
-            --gradient-blue: linear-gradient(to right, #3a6073, #3a7bd5);
-            --bg-color: #f0f4f8;
-            --card-bg: #ffffff;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
             --text-color: #333;
-            --label-color: #555;
+            --light-bg: #f9f9f9;
+            --card-width: 350px;
             --border-color: #dbe2e8;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-            min-height: 100vh;
         }
-
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
         .container {
             width: 100%;
-            max-width: 1200px;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 40px;
+            max-width: 900px;
+            background: white;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
         }
-
+        
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
-
+        
         .header h1 {
-            font-size: 2.5rem;
-            color: var(--primary-blue);
-            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 10px;
         }
-
-        .header p {
-            font-size: 1rem;
-            color: var(--label-color);
-        }
-
+        
         .main-content {
             display: flex;
-            gap: 40px;
+            gap: 30px;
             flex-wrap: wrap;
         }
-
+        
         .form-section {
             flex: 1;
             min-width: 300px;
@@ -79,15 +74,16 @@
             flex-direction: column;
             align-items: center;
         }
-
+        
         .input-group {
             margin-bottom: 25px;
         }
-
+        
         .input-group h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 15px;
+            color: var(--primary-color);
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
         }
@@ -95,22 +91,23 @@
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 15px;
         }
-
+        
         .form-field {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 15px;
         }
         
         .full-width {
             grid-column: 1 / -1;
         }
-
+        
         label {
-            font-size: 0.9rem;
-            color: var(--label-color);
+            display: block;
+            font-size: 14px;
             margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 500;
         }
         
         input[type="text"],
@@ -119,404 +116,547 @@
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 0.95rem;
-            font-family: 'Poppins', sans-serif;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 14px;
+            transition: all 0.3s;
         }
-
+        
         input[type="text"]:focus,
         input[type="date"]:focus {
             outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-
+        
         .file-upload-wrapper {
             position: relative;
             overflow: hidden;
             display: inline-block;
-            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 1px dashed var(--border-color);
             border-radius: 6px;
-            padding: 10px 15px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .file-upload-wrapper:hover {
-            border-color: var(--primary-blue);
-            background-color: #f9f9f9;
+        
+        .file-upload-btn:hover {
+            background: #f0f4f8;
+            border-color: var(--secondary-color);
         }
-        .file-upload-wrapper input[type=file] {
+        
+        .file-upload-wrapper input[type="file"] {
             position: absolute;
             left: 0;
             top: 0;
             opacity: 0;
-            cursor: pointer;
             width: 100%;
             height: 100%;
+            cursor: pointer;
         }
-        .file-upload-wrapper span {
-            font-size: 0.9rem;
-        }
+        
         .file-info {
-            font-size: 0.8rem;
-            color: var(--label-color);
+            font-size: 12px;
+            color: #666;
             margin-top: 5px;
-            display: inline-block;
+            display: block;
         }
-
+        
         #live-preview h2 {
-            font-size: 1.5rem;
+            font-size: 20px;
             font-weight: 600;
-            text-align: center;
             margin-bottom: 20px;
+            color: var(--primary-color);
         }
-
-        #id-card {
-            width: 280px;
-            height: 450px;
-            background: var(--card-bg);
+        
+        .id-card {
+            width: var(--card-width);
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .id-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .id-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .id-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--primary-color);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        
+        .logo-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .logo-container img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+        
+        .institute-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .photo-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .photo-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            position: relative;
+        }
+        
+        .photo-label {
+            font-size: 10px;
+            color: white;
+            margin-top: 5px;
+        }
+        
+        .id-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            border: 3px solid white;
+            background: #ddd;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .id-photo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .signature-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .signature-photo {
+            width: 150px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
-
-        #id-card-header {
-            width: 110%;
-            background: var(--gradient-blue);
-            padding: 30px 15px 45px 15px;
-            margin-top: -15px;
+        
+        .signature-photo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .id-body {
+            padding: 30px 25px;
+        }
+        
+        .id-details {
+            margin-bottom: 20px;
+        }
+        
+        .detail-row {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: white;
-            border-radius: 15px 15px 50% 50% / 15px 15px 20% 20%;
-        }
-
-        #card-logo {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: white;
-            padding: 3px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 8px;
         }
         
-        #card-college-name {
-            font-size: 1.1rem;
+        .detail-label {
             font-weight: 600;
+            color: var(--primary-color);
+            width: 120px;
+            flex-shrink: 0;
+            font-size: 14px;
         }
         
-        #card-student-photo-wrapper {
-            margin-top: -40px;
-            z-index: 10;
-        }
-        
-        #card-student-photo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--card-bg);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background: #e9e9e9;
-        }
-        
-        #card-student-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-        
-        #card-student-course {
-            font-size: 1rem;
-            color: var(--primary-blue);
-            font-weight: 500;
-            margin-top: 2px;
-        }
-        
-        .id-card-details {
-            font-size: 0.8rem;
-            margin-top: 20px;
-            text-align: left;
-            width: 100%;
-            padding: 0 10px;
-            color: var(--label-color);
-        }
-        .id-card-details p {
-            margin-bottom: 8px;
-        }
-        .id-card-details span {
-            font-weight: 600;
+        .detail-value {
             color: var(--text-color);
+            font-size: 14px;
         }
-
-        #card-signature {
-            max-width: 100px;
-            max-height: 40px;
-            margin-top: auto;
-            align-self: flex-end;
-            margin-right: 10px;
-            margin-bottom: 5px;
-            object-fit: contain;
+        
+        .id-footer {
+            background: var(--light-bg);
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #eee;
         }
-
-
+        
+        .valid-until {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
         #download-btn {
-            background: var(--gradient-blue);
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
             font-weight: 500;
-        }
-
-        #download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(58, 123, 213, 0.4);
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        @media (max-width: 992px) {
+        #download-btn:hover {
+            background: #1a2a3a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
-                align-items: center;
             }
-            .form-section {
+            
+            .form-section, .preview-section {
                 width: 100%;
-                max-width: 600px;
             }
-             .preview-section {
-                margin-top: 40px;
+            
+            .form-grid {
+                grid-template-columns: 1fr;
             }
         }
         
-        @media (max-width: 576px) {
-             .form-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 480px) {
             .container {
                 padding: 20px;
             }
-            .header h1 {
-                font-size: 2rem;
+            
+            .id-card {
+                width: 100%;
+            }
+            
+            .detail-label {
+                width: 100px;
             }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="header">
-            <h1>ID Card Generator</h1>
-            <p>Fill in the details to create the ID card.</p>
+            <h1>Kaung Ye ID Card Generator</h1>
+            <p>Fill in the details to create your ID card</p>
         </div>
-
+        
         <div class="main-content">
             <div class="form-section">
                 <div class="input-group">
-                    <h3>Uploads</h3>
+                    <h3>Upload Images</h3>
                     <div class="form-grid">
                         <div class="form-field">
                             <label for="college-logo">College Logo</label>
-                            <label class="file-upload-wrapper">
-                                <span id="college-logo-label-text">Choose Logo</span>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-btn" id="college-logo-label">Choose Logo</div>
                                 <input type="file" id="college-logo" accept="image/*">
-                            </label>
-                            <span id="college-logo-filename" class="file-info">No file chosen</span>
+                                <span class="file-info" id="college-logo-info">No file chosen</span>
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for="student-photo">Student Photo</label>
-                             <label class="file-upload-wrapper">
-                                <span>Choose Photo</span>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-btn" id="student-photo-label">Choose Photo</div>
                                 <input type="file" id="student-photo" accept="image/*">
-                            </label>
-                            <span id="student-photo-filename" class="file-info">No file chosen</span>
+                                <span class="file-info" id="student-photo-info">No file chosen</span>
+                            </div>
                         </div>
                         <div class="form-field">
-                            <label for="signature">Principal's Signature</label>
-                             <label class="file-upload-wrapper">
-                                <span>Choose Signature</span>
-                                <input type="file" id="signature" accept="image/*">
-                            </label>
-                            <span id="signature-filename" class="file-info">No file chosen</span>
+                            <label for="signature-photo">Signature</label>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-btn" id="signature-photo-label">Choose Signature</div>
+                                <input type="file" id="signature-photo" accept="image/*">
+                                <span class="file-info" id="signature-photo-info">No file chosen</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="input-group">
                     <h3>Student Details</h3>
                     <div class="form-grid">
                         <div class="form-field full-width">
-                            <label for="college-name">College Name</label>
-                            <input type="text" id="college-name" placeholder="e.g., College">
+                            <label for="institute-name">Institute Name</label>
+                            <input type="text" id="institute-name" value="A. G. Patil Polytechnic Institute">
                         </div>
                         <div class="form-field">
-                            <label for="student-name">Name*</label>
-                            <input type="text" id="student-name" placeholder="e.g., Kkuser">
+                            <label for="student-name">Name</label>
+                            <input type="text" id="student-name" value="Kaung">
                         </div>
                         <div class="form-field">
-                            <label for="student-course">Class / Course*</label>
-                            <input type="text" id="student-course" placeholder="e.g., Math">
+                            <label for="student-course">Course</label>
+                            <input type="text" id="student-course" value="Computer Science">
                         </div>
                         <div class="form-field">
-                            <label for="roll-number">Roll Number*</label>
-                            <input type="text" id="roll-number" placeholder="e.g., 290">
+                            <label for="roll-number">Roll No.</label>
+                            <input type="text" id="roll-number" value="14">
                         </div>
                         <div class="form-field">
-                            <label for="dob">Date of Birth*</label>
-                            <input type="date" id="dob">
+                            <label for="dob">D.O.B</label>
+                            <input type="date" id="dob" value="2000-05-05">
                         </div>
                         <div class="form-field">
-                            <label for="valid-upto">Valid Upto*</label>
-                            <input type="text" id="valid-upto" placeholder="e.g., 2026">
-                        </div>
-                        <div class="form-field full-width">
-                            <label for="college-address">College Address & Phone</label>
-                            <input type="text" id="college-address" placeholder="e.g., College Address, 9596788..">
+                            <label for="valid-upto">Valid Upto</label>
+                            <input type="text" id="valid-upto" value="2026">
                         </div>
                     </div>
                 </div>
             </div>
-
+            
             <div class="preview-section">
-                <div id="live-preview">
-                    <h2>Live Preview</h2>
-                    <div id="id-card">
-                        <div id="id-card-header">
-                            <img id="card-logo" src="" alt="Logo">
-                            <span id="card-college-name">College Name</span>
+                <h2>Live Preview</h2>
+                <div class="id-card" id="id-card">
+                    <div class="id-header">
+                        <div class="logo-container" id="card-logo-container">
+                            <img id="card-logo" src="" alt="College Logo">
                         </div>
-                        <div id="card-student-photo-wrapper">
-                             <img id="card-student-photo" src="" alt="Student Photo">
+                        <div class="institute-name" id="card-institute-name">A. G. Patil Polytechnic Institute</div>
+                        <div class="photo-container">
+                            <div class="photo-wrapper">
+                                <div class="id-photo" id="card-student-photo">
+                                    <span>Photo</span>
+                                </div>
+                            </div>
                         </div>
-                        <h3 id="card-student-name">Student Name</h3>
-                        <p id="card-student-course">Course</p>
+                    </div>
+                    
+                    <div class="id-body">
+                        <div class="id-details">
+                            <div class="detail-row">
+                                <div class="detail-label">Name</div>
+                                <div class="detail-value" id="card-student-name">Kaung</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Course</div>
+                                <div class="detail-value" id="card-student-course">Computer Science</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Roll No.</div>
+                                <div class="detail-value" id="card-roll-number">14</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">D.O.B</div>
+                                <div class="detail-value" id="card-dob">2000-05-05</div>
+                            </div>
+                        </div>
                         
-                        <div class="id-card-details">
-                           <p><strong>Roll No.:</strong> <span id="card-roll-number"></span></p>
-                           <p><strong>D.O.B:</strong> <span id="card-dob"></span></p>
-                           <p><strong>Valid Upto:</strong> <span id="card-valid-upto"></span></p>
+                        <div class="signature-container">
+                            <div class="signature-photo" id="card-signature-photo">
+                                <span>Signature</span>
+                            </div>
                         </div>
-
-                        <img id="card-signature" src="" alt="Signature">
+                    </div>
+                    
+                    <div class="id-footer">
+                        <div class="valid-until" id="card-valid-upto">Valid Upto: 2026</div>
                     </div>
                 </div>
-                <button id="download-btn">DOWNLOAD CARD</button>
+                
+                <button id="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                    Download ID Card
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // JavaScript Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = {
-                collegeName: document.getElementById('college-name'),
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form elements
+            const formElements = {
+                instituteName: document.getElementById('institute-name'),
                 studentName: document.getElementById('student-name'),
                 studentCourse: document.getElementById('student-course'),
                 rollNumber: document.getElementById('roll-number'),
                 dob: document.getElementById('dob'),
                 validUpto: document.getElementById('valid-upto'),
-                collegeAddress: document.getElementById('college-address'),
                 collegeLogo: document.getElementById('college-logo'),
                 studentPhoto: document.getElementById('student-photo'),
-                signature: document.getElementById('signature'),
+                signaturePhoto: document.getElementById('signature-photo')
             };
-
+            
+            // File info elements
+            const fileInfoElements = {
+                collegeLogo: document.getElementById('college-logo-info'),
+                studentPhoto: document.getElementById('student-photo-info'),
+                signaturePhoto: document.getElementById('signature-photo-info')
+            };
+            
+            // Card display elements
             const cardElements = {
-                collegeName: document.getElementById('card-college-name'),
+                instituteName: document.getElementById('card-institute-name'),
                 studentName: document.getElementById('card-student-name'),
                 studentCourse: document.getElementById('card-student-course'),
                 rollNumber: document.getElementById('card-roll-number'),
                 dob: document.getElementById('card-dob'),
                 validUpto: document.getElementById('card-valid-upto'),
-                logo: document.getElementById('card-logo'),
-                photo: document.getElementById('card-student-photo'),
-                signature: document.getElementById('card-signature'),
-            };
-
-            const fileInfo = {
-                collegeLogo: document.getElementById('college-logo-filename'),
-                studentPhoto: document.getElementById('student-photo-filename'),
-                signature: document.getElementById('signature-filename'),
-            }
-
-            // Function to update text content
-            const updateText = (inputElement, cardElement) => {
-                cardElement.textContent = inputElement.value || cardElement.dataset.placeholder;
+                collegeLogo: document.getElementById('card-logo'),
+                studentPhoto: document.getElementById('card-student-photo'),
+                signaturePhoto: document.getElementById('card-signature-photo')
             };
             
-             // Set placeholder text from initial card text
-            for(const key in cardElements) {
-                if(cardElements[key] && cardElements[key].textContent) {
-                    cardElements[key].dataset.placeholder = cardElements[key].textContent;
-                }
+            // Update text fields
+            function updateTextField(inputElement, cardElement) {
+                inputElement.addEventListener('input', function() {
+                    cardElement.textContent = this.value;
+                });
             }
-
-
-            // Add event listeners for text inputs
-            inputs.collegeName.addEventListener('input', () => updateText(inputs.collegeName, cardElements.collegeName));
-            inputs.studentName.addEventListener('input', () => updateText(inputs.studentName, cardElements.studentName));
-            inputs.studentCourse.addEventListener('input', () => updateText(inputs.studentCourse, cardElements.studentCourse));
-            inputs.rollNumber.addEventListener('input', () => updateText(inputs.rollNumber, cardElements.rollNumber));
-            inputs.validUpto.addEventListener('input', () => updateText(inputs.validUpto, cardElements.validUpto));
             
-            inputs.dob.addEventListener('input', () => {
-                 if(inputs.dob.value) {
-                    const date = new Date(inputs.dob.value);
-                    const formattedDate = `${('0' + date.getDate()).slice(-2)}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getFullYear()}`;
+            // Update date field
+            formElements.dob.addEventListener('input', function() {
+                const date = new Date(this.value);
+                if (!isNaN(date.getTime())) {
+                    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                     cardElements.dob.textContent = formattedDate;
                 } else {
-                    cardElements.dob.textContent = "";
+                    cardElements.dob.textContent = this.value;
                 }
             });
-
-            // Function to handle file inputs
-            const handleFileInput = (inputElement, cardImageElement, fileInfoElement) => {
-                inputElement.addEventListener('change', (event) => {
-                    const file = event.target.files[0];
+            
+            // Update all text fields
+            updateTextField(formElements.instituteName, cardElements.instituteName);
+            updateTextField(formElements.studentName, cardElements.studentName);
+            updateTextField(formElements.studentCourse, cardElements.studentCourse);
+            updateTextField(formElements.rollNumber, cardElements.rollNumber);
+            updateTextField(formElements.validUpto, cardElements.validUpto);
+            
+            // Handle file uploads
+            function handleFileUpload(inputElement, cardElement, infoElement, labelElement) {
+                inputElement.addEventListener('change', function() {
+                    const file = this.files[0];
                     if (file) {
                         const reader = new FileReader();
-                        reader.onload = (e) => {
-                            cardImageElement.src = e.target.result;
+                        reader.onload = function(e) {
+                            if (cardElement.tagName === 'IMG') {
+                                cardElement.src = e.target.result;
+                            } else {
+                                cardElement.innerHTML = '';
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                cardElement.appendChild(img);
+                            }
+                            infoElement.textContent = file.name;
                         };
                         reader.readAsDataURL(file);
-                        fileInfoElement.textContent = file.name;
-                    } else {
-                         cardImageElement.src = "";
-                         fileInfoElement.textContent = "No file chosen";
                     }
                 });
-            };
-
-            // Add event listeners for file inputs
-            handleFileInput(inputs.collegeLogo, cardElements.logo, fileInfo.collegeLogo);
-            handleFileInput(inputs.studentPhoto, cardElements.photo, fileInfo.studentPhoto);
-            handleFileInput(inputs.signature, cardElements.signature, fileInfo.signature);
-
+                
+                // Update label text when file is selected
+                inputElement.addEventListener('change', function() {
+                    const fileName = this.files[0]?.name || 'Choose File';
+                    labelElement.textContent = fileName.length > 20 ? 
+                        fileName.substring(0, 17) + '...' : fileName;
+                });
+            }
+            
+            // Set up file upload handlers
+            handleFileUpload(
+                formElements.collegeLogo, 
+                cardElements.collegeLogo, 
+                fileInfoElements.collegeLogo,
+                document.getElementById('college-logo-label')
+            );
+            
+            handleFileUpload(
+                formElements.studentPhoto, 
+                cardElements.studentPhoto, 
+                fileInfoElements.studentPhoto,
+                document.getElementById('student-photo-label')
+            );
+            
+            handleFileUpload(
+                formElements.signaturePhoto, 
+                cardElements.signaturePhoto, 
+                fileInfoElements.signaturePhoto,
+                document.getElementById('signature-photo-label')
+            );
+            
             // Download button functionality
-            const downloadBtn = document.getElementById('download-btn');
-            const idCard = document.getElementById('id-card');
-
-            downloadBtn.addEventListener('click', () => {
-                html2canvas(idCard, { 
-                    scale: 3, // Higher scale for better quality
-                    useCORS: true // Important for external images if any
+            document.getElementById('download-btn').addEventListener('click', function() {
+                const btn = this;
+                const originalText = btn.innerHTML;
+                
+                // Show loading state
+                btn.innerHTML = `
+                    <svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0a8 8 0 1 0 8 8 8 8 0 0 0-8-8zM1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0z"/>
+                        <path d="M8 0a8 8 0 0 0-8 8h1.5a6.5 6.5 0 1 1 6.5 6.5V8a.5.5 0 0 0-1 0v5.957A6.5 6.5 0 0 1 1.5 8H0a8 8 0 0 0 8 8V0z"/>
+                    </svg>
+                    Generating...
+                `;
+                
+                // Generate the card image
+                html2canvas(document.getElementById('id-card'), {
+                    scale: 2,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null
                 }).then(canvas => {
+                    // Create download link
                     const link = document.createElement('a');
-                    link.download = 'id-card.png';
+                    link.download = 'AG_Patil_ID_Card.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
+                    
+                    // Reset button
+                    btn.innerHTML = originalText;
                 });
             });
         });
